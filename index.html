@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jogo de Nomes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>Jogo de Nomes</h1>
+
+  <div id="game-container">
+    <p>Digite a quantidade de nomes desejados: <input type="number" id="quantity-input"></p>
+    <button onclick="startGame()">Iniciar o Jogo</button>
+  </div>
+
+  <script>
+    var names = [];
+    var currentRound = 1;
+    var score = 0;
+    var totalRounds = 5;
+
+    function startGame() {
+      var quantityInput = document.getElementById("quantity-input");
+      var quantity = parseInt(quantityInput.value);
+
+      if (isNaN(quantity) || quantity <= 0) {
+        alert("Por favor, insira um número válido de nomes.");
+        return;
+      }
+
+      names = generateNames(quantity);
+      currentRound = 1;
+      score = 0;
+      showNextName();
+    }
+
+    function generateNames(quantity) {
+      var generatedNames = [];
+
+      for (var i = 1; i <= quantity; i++) {
+        generatedNames.push("Nome " + i);
+      }
+
+      return generatedNames;
+    }
+
+    function showNextName() {
+      if (currentRound > totalRounds) {
+        endGame();
+        return;
+      }
+
+      var nameIndex = currentRound - 1;
+      var currentName = names[nameIndex];
+
+      var userInput = prompt("Digite o " + getOrdinalNumber(currentRound) + " nome da lista:");
+
+      if (userInput === currentName) {
+        score++;
+      } else {
+        score--;
+      }
+
+      currentRound++;
+      showNextName();
+    }
+
+    function getOrdinalNumber(number) {
+      var suffix = "";
+
+      if (number === 1) {
+        suffix = "st";
+      } else if (number === 2) {
+        suffix = "nd";
+      } else if (number === 3) {
+        suffix = "rd";
+      } else {
+        suffix = "th";
+      }
+
+      return number + suffix;
+    }
+
+    function endGame() {
+      alert("Fim do jogo! Sua pontuação final: " + score);
+      resetGameContainer();
+    }
+
+    function resetGameContainer() {
+      var gameContainer = document.getElementById("game-container");
+      gameContainer.innerHTML = `
+        <p>Digite a quantidade de nomes desejados: <input type="number" id="quantity-input"></p>
+        <button onclick="startGame()">Iniciar o Jogo</button>
+      `;
+    }
+  </script>
+</body>
+</html>
